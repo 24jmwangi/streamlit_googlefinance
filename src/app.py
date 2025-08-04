@@ -35,7 +35,7 @@ def connect_to_gsheets():
     # Use credentials from Streamlit secrets
     creds = Credentials.from_service_account_info(st.secrets["gcp_service_account"])
     gc = gspread.authorize(creds)
-    _sh = gc.open_by_key(st.secrets["SPREADSHEET_ID"])  # optional: move SPREADSHEET_ID to secrets too
+    _sh = gc.open_by_key(SPREADSHEET_ID)  # optional: move SPREADSHEET_ID to secrets too
     return _sh
 #def connect_to_gsheets():
     #gc = gspread.service_account(filename=PATH_to_KEY)
