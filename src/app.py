@@ -6,6 +6,8 @@ import streamlit as st
 from datetime import datetime
 from itertools import islice
 from plotly.subplots import make_subplots
+from google.oauth2.service_account import Credentials
+
 
 ##################################################################
 ### Configure App
@@ -30,9 +32,15 @@ def batched(iterable, n_cols):
 
 @st.cache_resource
 def connect_to_gsheets():
-    gc = gspread.service_account(filename=PATH_to_KEY)
-    _sh = gc.open_by_key(SPREADSHEET_ID)
+    # Use credentials from Streamlit secrets
+    creds = Credentials.from_service_account_info(st.secrets["gcp_service_account"])
+    gc = gspread.authorize(creds)
+    _sh = gc.open_by_key(st.secrets["spreadsheet_id"])  # optional: move SPREADSHEET_ID to secrets too
     return _sh
+#def connect_to_gsheets():
+    #gc = gspread.service_account(filename=PATH_to_KEY)
+   # _sh = gc.open_by_key(SPREADSHEET_ID)
+  #  return _sh
 
 @st.cache_data
 def download_data(_sh):
