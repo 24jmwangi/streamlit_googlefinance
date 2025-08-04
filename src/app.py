@@ -16,7 +16,7 @@ from google.oauth2.service_account import Credentials
 st.set_page_config(page_title="Stocks Dashboard", page_icon="💹", layout="wide")
 st.html("styles.html")
 
-PATH_to_KEY = "/workspaces/codespaces-blank/alien-walker-451918-p8-3c47ebe85cef.json"
+
 SPREADSHEET_ID = "1XV31clJBum7yNtZBqF_gD_w-6AFp_8wPtOvyG8HBueM"
 
 def batched(iterable, n_cols):
@@ -35,7 +35,7 @@ def connect_to_gsheets():
     # Use credentials from Streamlit secrets
     creds = Credentials.from_service_account_info(st.secrets["gcp_service_account"])
     gc = gspread.authorize(creds)
-    _sh = gc.open_by_key(st.secrets["spreadsheet_id"])  # optional: move SPREADSHEET_ID to secrets too
+    _sh = gc.open_by_key(st.secrets["SPREADSHEET_ID"])  # optional: move SPREADSHEET_ID to secrets too
     return _sh
 #def connect_to_gsheets():
     #gc = gspread.service_account(filename=PATH_to_KEY)
