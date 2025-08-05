@@ -14,6 +14,7 @@ from google.oauth2.service_account import Credentials
 ##################################################################
 
 st.set_page_config(page_title="Stocks Dashboard", page_icon="💹", layout="wide")
+
 st.html("styles.html")
 
 
@@ -30,7 +31,7 @@ def batched(iterable, n_cols):
 ### Data
 ##################################################################
 
-@st.cache_resource
+@st.cache_resource(ttl=86400)
 def connect_to_gsheets():
     scopes = [
         "https://www.googleapis.com/auth/spreadsheets",
@@ -46,7 +47,7 @@ def connect_to_gsheets():
    # _sh = gc.open_by_key(SPREADSHEET_ID)
   #  return _sh
 
-@st.cache_data
+@st.cache_data(ttl=86400)
 def download_data(_sh):
     # Assumes you have two sheets: "ticker" and one per ticker symbol
     ticker_ws = _sh.worksheet("ticker")
@@ -63,10 +64,10 @@ def download_data(_sh):
             history_dfs[ticker] = df
         except gspread.WorksheetNotFound:
             continue
+    last_updated = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return ticker_df, history_dfs, last_updated
 
-    return ticker_df, history_dfs
-
-@st.cache_data
+@st.cache_data(ttl=86400)
 def transform_data(ticker_df, history_dfs):
     ticker_df["last_trade_time"] = pd.to_datetime(
         ticker_df["last_trade_time"],
@@ -368,10 +369,17 @@ def display_watchlist(ticker_df):
 ##################################################################
 
 _sh = connect_to_gsheets()
-ticker_df, history_dfs = download_data(_sh)
+ticker_df, history_dfs, last_updated= download_data(_sh)
 ticker_df, history_dfs = transform_data(ticker_df, history_dfs)
 
 st.html('<h1 class="title">Stocks Dashboard</h1>')
+st.markdown(f"🕒 **Last updated:** `{last_updated}`")
+st.sidebar.button("🔄Refresh", on_click=lambda: (
+    download_data.clear(),
+    transform_data.clear(),
+    st.cache_resource.clear(),  # Optional: also clear connection
+    st.experimental_rerun()
+))
 
 display_watchlist(ticker_df)
 st.divider()
