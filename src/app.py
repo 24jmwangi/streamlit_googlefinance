@@ -374,13 +374,12 @@ ticker_df, history_dfs = transform_data(ticker_df, history_dfs)
 
 st.html('<h1 class="title">Google finance stocks dashboard</h1>')
 st.markdown(f"🕒 **Last updated:** `{last_updated}`")
-st.button("🔄Refresh", on_click=lambda: (
-    download_data.clear(),
-    transform_data.clear(),
-    st.cache_resource.clear(),  # Optional: also clear connection
+refresh = st.button("🔄 Refresh")
+if refresh:
+    download_data.clear()
+    transform_data.clear()
+    st.cache_resource.clear()
     st.rerun()
-))
-
 display_watchlist(ticker_df)
 st.divider()
 display_symbol_history(ticker_df, history_dfs)
