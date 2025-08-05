@@ -13,7 +13,7 @@ import pytz
 ### Configure App
 ##################################################################
 
-st.set_page_config(page_title="Google finance streamlit app", page_icon="💹", layout="wide")
+st.set_page_config(page_title="Google finance streamlit app", page_icon="💰", layout="wide")
 
 st.html("styles.html")
 
