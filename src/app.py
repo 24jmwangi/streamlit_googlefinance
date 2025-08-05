@@ -32,7 +32,7 @@ def batched(iterable, n_cols):
 ### Data
 ##################################################################
 
-# @st.cache_resource
+@st.cache_resource
 def connect_to_gsheets():
     scopes = [
         "https://www.googleapis.com/auth/spreadsheets",
@@ -48,7 +48,7 @@ def connect_to_gsheets():
    # _sh = gc.open_by_key(SPREADSHEET_ID)
   #  return _sh
 
-# @st.cache_data
+@st.cache_data
 def download_data(_sh):
     # Assumes you have two sheets: "ticker" and one per ticker symbol
     ticker_ws = _sh.worksheet("ticker")
@@ -68,7 +68,7 @@ def download_data(_sh):
     # last_updated = datetime.now(tz).strftime("%d-%m-%Y %H:%M:%S")
     return ticker_df, history_dfs
 
-# @st.cache_data
+@st.cache_data
 def transform_data(ticker_df, history_dfs):
     ticker_df["last_trade_time"] = pd.to_datetime(
         ticker_df["last_trade_time"],
@@ -96,8 +96,8 @@ def transform_data(ticker_df, history_dfs):
 
     for ticker in list(ticker_df["ticker"]):
         if ticker in history_dfs:
-            history_dfs[ticker]["Date"] = pd.to_datetime(
-                history_dfs[ticker]["Date"],
+            history_dfs[ticker]["date"] = pd.to_datetime(
+                history_dfs[ticker]["date"],
                 dayfirst=True,
             )
             for col in ["open", "high", "low", "close", "volume"]:
