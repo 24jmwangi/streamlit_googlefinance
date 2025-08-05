@@ -375,7 +375,7 @@ ticker_df, history_dfs, last_updated= download_data(_sh)
 ticker_df, history_dfs = transform_data(ticker_df, history_dfs)
 
 st.html('<h1 class="title">Google finance stocks dashboard</h1>')
-st.markdown(f"🕒 **Last updated:** `{last_updated}`")
+st.markdown(f"🕒 **Last updated:** `{last_updated}`**EAT**")
 refresh = st.button("🔄 Refresh")
 
 if refresh:
