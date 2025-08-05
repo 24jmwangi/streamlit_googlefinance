@@ -19,7 +19,7 @@ st.html("styles.html")
 
 
 SPREADSHEET_ID = "1XV31clJBum7yNtZBqF_gD_w-6AFp_8wPtOvyG8HBueM"
-tz = pytz.timezone("Africa/Nairobi")
+# tz = pytz.timezone("Africa/Nairobi")
 
 def batched(iterable, n_cols):
     if n_cols < 1:
@@ -65,8 +65,8 @@ def download_data(_sh):
             history_dfs[ticker] = df
         except gspread.WorksheetNotFound:
             continue
-    last_updated = datetime.now(tz).strftime("%d-%m-%Y %H:%M:%S")
-    return ticker_df, history_dfs, last_updated
+    # last_updated = datetime.now(tz).strftime("%d-%m-%Y %H:%M:%S")
+    return ticker_df, history_dfs
 
 @st.cache_data(ttl=86400)
 def transform_data(ticker_df, history_dfs):
@@ -370,11 +370,11 @@ def display_watchlist(ticker_df):
 ##################################################################
 
 _sh = connect_to_gsheets()
-ticker_df, history_dfs, last_updated= download_data(_sh)
+ticker_df, history_dfs= download_data(_sh)
 ticker_df, history_dfs = transform_data(ticker_df, history_dfs)
 
 st.html('<h1 class="title">Google finance stocks dashboard</h1>')
-st.markdown(f"🕒 **Last updated:** `{last_updated}`")
+# st.markdown(f"🕒 **Last updated:** `{last_updated}`")
 refresh = st.button("🔄 Refresh")
 if refresh:
     download_data.clear()
