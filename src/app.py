@@ -96,8 +96,8 @@ def transform_data(ticker_df, history_dfs):
 
     for ticker in list(ticker_df["ticker"]):
         if ticker in history_dfs:
-            history_dfs[ticker]["date"] = pd.to_datetime(
-                history_dfs[ticker]["date"],
+            history_dfs[ticker]["Date"] = pd.to_datetime(
+                history_dfs[ticker]["Date"],
                 dayfirst=True,
             )
             for col in ["open", "high", "low", "close", "volume"]:
