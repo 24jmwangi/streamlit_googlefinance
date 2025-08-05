@@ -374,12 +374,12 @@ ticker_df, history_dfs = transform_data(ticker_df, history_dfs)
 
 st.html('<h1 class="title">Stocks Dashboard</h1>')
 st.markdown(f"🕒 **Last updated:** `{last_updated}`")
-st.sidebar.button("🔄Refresh", on_click=lambda: (
-    download_data.clear(),
-    transform_data.clear(),
-    st.cache_resource.clear(),  # Optional: also clear connection
-    st.experimental_rerun()
-))
+# st.sidebar.button("🔄Refresh", on_click=lambda: (
+#     download_data.clear(),
+#     transform_data.clear(),
+#     st.cache_resource.clear(),  # Optional: also clear connection
+#     st.rerun()
+# ))
 
 display_watchlist(ticker_df)
 st.divider()
