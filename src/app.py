@@ -6,15 +6,18 @@ import streamlit as st
 from datetime import datetime
 from itertools import islice
 from plotly.subplots import make_subplots
+from google.oauth2.service_account import Credentials
+
 
 ##################################################################
 ### Configure App
 ##################################################################
 
-st.set_page_config(page_title="Stocks Dashboard", page_icon="💹", layout="wide")
+st.set_page_config(page_title="Google finance streamlit app", page_icon="💹", layout="wide")
+
 st.html("styles.html")
 
-PATH_to_KEY = "/workspaces/codespaces-blank/alien-walker-451918-p8-3c47ebe85cef.json"
+
 SPREADSHEET_ID = "1XV31clJBum7yNtZBqF_gD_w-6AFp_8wPtOvyG8HBueM"
 
 def batched(iterable, n_cols):
@@ -28,13 +31,23 @@ def batched(iterable, n_cols):
 ### Data
 ##################################################################
 
-@st.cache_resource
+@st.cache_resource(ttl=86400)
 def connect_to_gsheets():
-    gc = gspread.service_account(filename=PATH_to_KEY)
-    _sh = gc.open_by_key(SPREADSHEET_ID)
+    scopes = [
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/drive"
+    ]
+    # Use credentials from Streamlit secrets
+    creds = Credentials.from_service_account_info(st.secrets["gcp_service_account"], scopes=scopes)
+    gc = gspread.authorize(creds)
+    _sh = gc.open_by_key(SPREADSHEET_ID)  # optional: move SPREADSHEET_ID to secrets too
     return _sh
+#def connect_to_gsheets():
+    #gc = gspread.service_account(filename=PATH_to_KEY)
+   # _sh = gc.open_by_key(SPREADSHEET_ID)
+  #  return _sh
 
-@st.cache_data
+@st.cache_data(ttl=86400)
 def download_data(_sh):
     # Assumes you have two sheets: "ticker" and one per ticker symbol
     ticker_ws = _sh.worksheet("ticker")
@@ -51,10 +64,10 @@ def download_data(_sh):
             history_dfs[ticker] = df
         except gspread.WorksheetNotFound:
             continue
+    last_updated = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return ticker_df, history_dfs, last_updated
 
-    return ticker_df, history_dfs
-
-@st.cache_data
+@st.cache_data(ttl=86400)
 def transform_data(ticker_df, history_dfs):
     ticker_df["last_trade_time"] = pd.to_datetime(
         ticker_df["last_trade_time"],
@@ -356,11 +369,17 @@ def display_watchlist(ticker_df):
 ##################################################################
 
 _sh = connect_to_gsheets()
-ticker_df, history_dfs = download_data(_sh)
+ticker_df, history_dfs, last_updated= download_data(_sh)
 ticker_df, history_dfs = transform_data(ticker_df, history_dfs)
 
-st.html('<h1 class="title">Stocks Dashboard</h1>')
-
+st.html('<h1 class="title">Google finance stocks dashboard</h1>')
+st.markdown(f"🕒 **Last updated:** `{last_updated}`")
+refresh = st.button("🔄 Refresh")
+if refresh:
+    download_data.clear()
+    transform_data.clear()
+    st.cache_resource.clear()
+    st.rerun()
 display_watchlist(ticker_df)
 st.divider()
 display_symbol_history(ticker_df, history_dfs)
