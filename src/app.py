@@ -13,7 +13,7 @@ from google.oauth2.service_account import Credentials
 ### Configure App
 ##################################################################
 
-st.set_page_config(page_title="Stocks Dashboard", page_icon="💹", layout="wide")
+st.set_page_config(page_title="Google finance streamlit app", page_icon="💹", layout="wide")
 
 st.html("styles.html")
 
@@ -372,14 +372,14 @@ _sh = connect_to_gsheets()
 ticker_df, history_dfs, last_updated= download_data(_sh)
 ticker_df, history_dfs = transform_data(ticker_df, history_dfs)
 
-st.html('<h1 class="title">Stocks Dashboard</h1>')
+st.html('<h1 class="title">Google finance stocks dashboard</h1>')
 st.markdown(f"🕒 **Last updated:** `{last_updated}`")
-# st.sidebar.button("🔄Refresh", on_click=lambda: (
-#     download_data.clear(),
-#     transform_data.clear(),
-#     st.cache_resource.clear(),  # Optional: also clear connection
-#     st.rerun()
-# ))
+st.button("🔄Refresh", on_click=lambda: (
+    download_data.clear(),
+    transform_data.clear(),
+    st.cache_resource.clear(),  # Optional: also clear connection
+    st.rerun()
+))
 
 display_watchlist(ticker_df)
 st.divider()
