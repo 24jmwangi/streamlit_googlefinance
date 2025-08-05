@@ -7,7 +7,7 @@ from datetime import datetime
 from itertools import islice
 from plotly.subplots import make_subplots
 from google.oauth2.service_account import Credentials
-
+import pytz
 
 ##################################################################
 ### Configure App
@@ -19,6 +19,7 @@ st.html("styles.html")
 
 
 SPREADSHEET_ID = "1XV31clJBum7yNtZBqF_gD_w-6AFp_8wPtOvyG8HBueM"
+tz = pytz.timezone("Africa/Nairobi")
 
 def batched(iterable, n_cols):
     if n_cols < 1:
@@ -64,7 +65,7 @@ def download_data(_sh):
             history_dfs[ticker] = df
         except gspread.WorksheetNotFound:
             continue
-    last_updated = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    last_updated = datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
     return ticker_df, history_dfs, last_updated
 
 @st.cache_data(ttl=86400)
