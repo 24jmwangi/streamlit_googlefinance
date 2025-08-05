@@ -65,7 +65,7 @@ def download_data(_sh):
             history_dfs[ticker] = df
         except gspread.WorksheetNotFound:
             continue
-    last_updated = datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
+    last_updated = datetime.now(tz).strftime("%d-%m-%Y %H:%M:%S")
     return ticker_df, history_dfs, last_updated
 
 @st.cache_data(ttl=86400)
