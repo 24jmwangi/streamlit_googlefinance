@@ -7,7 +7,7 @@ from datetime import datetime
 from itertools import islice
 from plotly.subplots import make_subplots
 from google.oauth2.service_account import Credentials
-import pytz
+
 
 ##################################################################
 ### Configure App
