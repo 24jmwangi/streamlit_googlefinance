@@ -299,13 +299,13 @@ def plot_sparkline(data):
         ),
     )
     fig_spark.update_traces(hovertemplate="Price: $ %{y:.2f}")
-    fig_spark.update_xaxes(visible=False, fixedrange=True)
+    fig_spark.update_xaxes(visible=False, fixedrange=False)
     fig_spark.update_yaxes(visible=False, fixedrange=True)
     fig_spark.update_layout(
         showlegend=False,
         plot_bgcolor="white",
         height=50,
-        margin=dict(t=10, l=0, b=0, r=5, pad=0),
+        margin=dict(t=10, l=0, b=0, r=0, pad=0),
     )
     return fig_spark
 
