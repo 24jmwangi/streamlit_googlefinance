@@ -305,7 +305,7 @@ def plot_sparkline(data):
         showlegend=False,
         plot_bgcolor="white",
         height=50,
-        margin=dict(t=8, l=0, b=0, r=0, pad=0),
+        margin=dict(t=5, l=0, b=0, r=0, pad=0),
     )
     return fig_spark
 
