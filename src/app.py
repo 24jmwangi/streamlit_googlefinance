@@ -348,7 +348,7 @@ def display_watchlist_card(ticker, symbol_name, last_price, change_pct, open):
             st.plotly_chart(
                 fig_spark,
                 config=dict(displayModeBar=False),
-                use_container_width=True,
+                use_container_width=False,
             )
 
 def display_watchlist(ticker_df):
