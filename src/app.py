@@ -304,7 +304,8 @@ def plot_sparkline(data):
     fig_spark.update_layout(
         showlegend=False,
         plot_bgcolor="white",
-        height=200,
+        height=50,
+        width=100,
         margin=dict(t=10, l=0, b=0, r=0, pad=0),
     )
     return fig_spark
