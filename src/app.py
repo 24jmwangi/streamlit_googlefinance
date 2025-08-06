@@ -342,12 +342,12 @@ def display_watchlist_card(ticker, symbol_name, last_price, change_pct, open):
                 st.markdown(f"$ {last_price:.2f}")
 
         with br:
-            st.html(f'<span class="watchlist_price_label"></span>')
+            st.html(f'<span class="watchlist_br"></span>')
             fig_spark = plot_sparkline(open)
             st.plotly_chart(
                 fig_spark,
                 config=dict(displayModeBar=False),
-                use_container_width=False,
+                use_container_width=True,
             )
 
 def display_watchlist(ticker_df):
