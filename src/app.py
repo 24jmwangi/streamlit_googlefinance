@@ -305,7 +305,7 @@ def plot_sparkline(data):
         showlegend=False,
         plot_bgcolor="white",
         height=50,
-        margin=dict(t=0, l=0, b=0, r=0, pad=50),
+        margin=dict(t=10, l=0, b=0, r=0, pad=0),
     )
     return fig_spark
 
@@ -342,7 +342,7 @@ def display_watchlist_card(ticker, symbol_name, last_price, change_pct, open):
                 st.markdown(f"$ {last_price:.2f}")
 
         with br:
-            st.html(f'<span class="watchlist_br"></span>')
+            # st.html(f'<span class="watchlist_br"></span>')
             fig_spark = plot_sparkline(open)
             st.plotly_chart(
                 fig_spark,
